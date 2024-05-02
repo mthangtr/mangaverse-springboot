@@ -44,12 +44,5 @@ public class MangaDTO {
         } else {
             this.categories = new ArrayList<>();
         }
-        if (manga.getChapters() != null) {
-            this.chapters = manga.getChapters().stream()
-                    .map(ChapterDTO::new)
-                    .collect(Collectors.toList());
-        } else {
-            this.chapters = new ArrayList<>();
-        }
     }
 }

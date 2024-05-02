@@ -48,7 +48,6 @@ public class MangaService {
 
     public MangaDTO getMangaByIdWithCategories(int id) {
         Manga manga = mangaRepository.findByIdWithCate(id);
-        System.out.println(manga);
         if (manga == null) {
             return null;
         }

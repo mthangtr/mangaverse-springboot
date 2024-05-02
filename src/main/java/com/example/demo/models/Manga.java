@@ -43,9 +43,6 @@ public class Manga {
     @Column(name = "release_date")
     private LocalDateTime releaseDate;
 
-    @OneToMany(mappedBy = "manga")
-    private List<Chapter> chapters;
-
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "manga_category",

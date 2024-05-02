@@ -3,7 +3,6 @@ package com.example.demo.services;
 import com.example.demo.dtos.ChapterDTO;
 import com.example.demo.models.Chapter;
 import com.example.demo.repositories.ChapterRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
