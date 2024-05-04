@@ -20,4 +20,7 @@ public interface ChapterRepository extends JpaRepository<Chapter, Integer> {
     @Query(value = "SELECT c FROM Chapter c WHERE c.manga.id = :mangaId ORDER BY c.id DESC")
     Page<Chapter> findChaptersByMangaId(@Param("mangaId") int mangaId, Pageable pageable);
 
+    @Query("SELECT COUNT(c) FROM Chapter c WHERE c.manga.id = :mangaId")
+    int countChapterByMangaId(int mangaId);
+
 }

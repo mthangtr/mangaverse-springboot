@@ -1,11 +1,13 @@
 package com.example.demo.services;
 
 import com.example.demo.dtos.ChapterDTO;
+import com.example.demo.dtos.ChapterDetailDTO;
 import com.example.demo.models.Chapter;
 import com.example.demo.repositories.ChapterRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,5 +30,10 @@ public class ChapterService {
         List<Chapter> chapters = chapterRepository.findByMangaId(mangaId);
         return chapters.stream().map(ChapterDTO::new)
                 .collect(Collectors.toList());
+    }
+
+    public ChapterDetailDTO getChapterDetails(int chapterId) {
+       Optional<Chapter> chapter = chapterRepository.findById(chapterId);
+        return new ChapterDetailDTO(chapter);
     }
 }
