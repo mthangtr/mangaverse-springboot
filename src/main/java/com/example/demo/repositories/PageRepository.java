@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 public interface PageRepository extends JpaRepository<Page, Integer> {
 
-    @Query("SELECT new com.example.demo.dtos.PageDTO(p.url) FROM Page p WHERE p.chapter.id = :chapterId ORDER BY p.pageNumber")
+    @Query("SELECT new com.example.demo.dtos.PageDTO(p.id, p.pageNumber, p.url) FROM Page p WHERE p.chapter.id = :chapterId ORDER BY p.pageNumber")
     List<PageDTO> findPageDetailsByChapterId(int chapterId);
 }
