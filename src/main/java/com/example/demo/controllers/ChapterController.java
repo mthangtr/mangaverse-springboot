@@ -59,9 +59,16 @@ public class ChapterController {
             ChapterDetailDTO chapterDetails = chapterService.getChapterDetails(chapterId);
             return ResponseEntity.ok(chapterDetails);
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+
+    // http://localhost:8080/api/chapter/service/first-chapter/1
+    @GetMapping("/service/first-chapter/{mangaId}")
+    public ResponseEntity<ChapterDTO> getFirstChapterByMangaId(@PathVariable int mangaId) {
+        ChapterDTO chapterDTO = chapterService.getFirstChapterByMangaId(mangaId);
+        return ResponseEntity.ok(chapterDTO);
     }
 
 }

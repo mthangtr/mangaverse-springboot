@@ -4,7 +4,6 @@ import com.example.demo.dtos.ChapterDTO;
 import com.example.demo.dtos.MangaDTO;
 import com.example.demo.models.Manga;
 import com.example.demo.models.ResponseObject;
-import com.example.demo.repositories.ChapterRepository;
 import com.example.demo.repositories.MangaRepository;
 import com.example.demo.services.ChapterService;
 import com.example.demo.services.MangaService;
@@ -21,13 +20,13 @@ public class MangaController {
     private final MangaService mangaService;
 
     private final ChapterService chapterService;
-    private final MangaRepository repository;
+    private final MangaRepository mangaRepository;
 
-    public MangaController(MangaRepository repository,
+    public MangaController(MangaRepository mangaRepository,
                            MangaService mangaService,
                            ChapterService chapterService
     ) {
-        this.repository = repository;
+        this.mangaRepository = mangaRepository;
         this.mangaService = mangaService;
         this.chapterService = chapterService;
     }
@@ -49,7 +48,10 @@ public class MangaController {
         return ResponseEntity.ok(mangas);
     }
 
+
+    //Used
     //Get top 5 most viewed manga descending (for sidebar homepage)
+    //http://localhost:8080/api/manga/service/sidebar/top12/most-viewed
     @GetMapping("/service/sidebar/top12/most-viewed")
     public ResponseEntity<List<MangaDTO>> getTop12MostViewedManga() {
         List<MangaDTO> mangas = mangaService.getTop12MostViewedManga();
@@ -60,6 +62,8 @@ public class MangaController {
         return ResponseEntity.ok(mangas);
     }
 
+
+    //Used
     //Get all mangas with 3 latest chapters (for homepage)
     @GetMapping("service/home/all")
     public ResponseEntity<List<MangaDTO>> getAllMangaWith3LatestChapters() {
@@ -82,23 +86,30 @@ public class MangaController {
         return ResponseEntity.ok(mangas);
     }
 
-    //Get manga by id with categories and chapters
+    // Used
     // http://localhost:8080/api/manga/service/detail/1
     @GetMapping("/service/detail/{id}")
     public ResponseEntity<MangaDTO> getDetailedMangaById(@PathVariable int id) {
-        MangaDTO manga = mangaService.getMangaByIdWithCategories(id);
-        return ResponseEntity.ok(manga);
+        try {
+            if (!mangaRepository.existsById(id)) {
+                throw new RuntimeException("Manga not found");
+            }
+            MangaDTO manga = mangaService.getMangaByIdWithCategories(id);
+            return ResponseEntity.ok(manga);
+        }catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
     @PostMapping("/insert")
     public ResponseEntity<ResponseObject> insertManga(@RequestBody Manga newManga) {
         try {
-            if (repository.existsByTitle(newManga.getTitle())) {
+            if (mangaRepository.existsByTitle(newManga.getTitle())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                         new ResponseObject("400", "Manga already exists", null)
                 );
             }
-            Manga savedManga = repository.save(newManga);
+            Manga savedManga = mangaRepository.save(newManga);
             return ResponseEntity.ok(new ResponseObject("200", "Manga inserted successfully", savedManga));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
@@ -110,7 +121,7 @@ public class MangaController {
     // http://localhost:8080/api/manga/total-manga-number
     @GetMapping("/total-manga-number")
     public ResponseEntity<Integer> getTotalMangaNumber() {
-        int totalManga = repository.countTotalManga();
+        int totalManga = mangaRepository.countTotalManga();
         return ResponseEntity.ok(totalManga);
     }
 

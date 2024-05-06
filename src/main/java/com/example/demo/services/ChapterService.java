@@ -36,4 +36,9 @@ public class ChapterService {
        Optional<Chapter> chapter = chapterRepository.findById(chapterId);
         return new ChapterDetailDTO(chapter);
     }
+
+    public ChapterDTO getFirstChapterByMangaId(int mangaId) {
+        Chapter chapter = chapterRepository.findFirstByMangaIdOrderByIdAsc(mangaId);
+        return new ChapterDTO(chapter);
+    }
 }

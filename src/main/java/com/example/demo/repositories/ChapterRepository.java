@@ -23,4 +23,6 @@ public interface ChapterRepository extends JpaRepository<Chapter, Integer> {
     @Query("SELECT COUNT(c) FROM Chapter c WHERE c.manga.id = :mangaId")
     int countChapterByMangaId(int mangaId);
 
+    Chapter findFirstByMangaIdOrderByIdAsc(int mangaId);
+
 }
